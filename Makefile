@@ -1,7 +1,7 @@
 TEST?=$$(go list ./... | grep -v 'vendor')
 HOSTNAME=xilution.com
-NAMESPACE=com
-NAME=xilution-basics-swan
+NAMESPACE=basics
+NAME=swan
 BINARY=terraform-provider-${NAME}
 VERSION=0.2
 OS_ARCH=darwin_amd64
