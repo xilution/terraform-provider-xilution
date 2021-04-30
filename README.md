@@ -1,7 +1,3 @@
-# Terraform Provider Xilution Basics Swan
+# Xilution Terraform Provider
 
-Run the following command to build the provider
-
-```shell
-go build -o terraform-provider-xilution-basics-swan
-```
+Based on: https://learn.hashicorp.com/tutorials/terraform/provider-setup

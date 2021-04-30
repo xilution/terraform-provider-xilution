@@ -1,4 +1,3 @@
-TEST?=$$(go list ./... | grep -v 'vendor')
 HOSTNAME=xilution.com
 NAMESPACE=general
 NAME=xilution
