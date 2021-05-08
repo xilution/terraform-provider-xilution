@@ -7,25 +7,39 @@ terraform {
   }
 }
 
+locals {
+  organization_id = "1645137c2f53427da00edaa680256215"
+  client_id       = "40808d61f755421098b64529af53ceb9"
+  user_id         = "9bfbcd5e1baf490694170cd623e71305"
+}
+
 provider "xilution" {
-  username = "education"
-  password = "test123"
+  organization_id = local.organization_id
+  client_id       = local.client_id
 }
 
-module "psl" {
-  source = "./coffee"
-
-  coffee_name = "Packer Spiced Latte"
+data "xilution_organization" "xilution" {
+  id = local.organization_id
 }
 
-output "psl" {
-  value = module.psl.coffee
+output "xilution_organization" {
+  value = data.xilution_organization.xilution
 }
 
-data "xilution_order" "order" {
-  id = 1
+data "xilution_client" "terraform_client" {
+  id              = local.client_id
+  organization_id = local.organization_id
 }
 
-output "order" {
-  value = data.xilution_order.order
+output "xilution_client" {
+  value = data.xilution_client.terraform_client
+}
+
+data "xilution_user" "tbrunia" {
+  id              = local.user_id
+  organization_id = local.organization_id
+}
+
+output "xilution_user" {
+  value = data.xilution_user.tbrunia
 }

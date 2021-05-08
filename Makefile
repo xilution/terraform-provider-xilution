@@ -30,3 +30,14 @@ install: build
 
 testacc: 
 	TF_ACC=1 go test ./... -v $(TESTARGS) -timeout 120m
+
+format:
+	go fmt ./...
+
+clean:
+	rm -rf vendor terraform.tfstate terraform.tfstate.backup .terraform.lock.hcl .terraform
+
+run_examples:
+	rm -rf .terraform.lock.hcl
+	terraform init ./examples/
+	terraform apply ./examples/
