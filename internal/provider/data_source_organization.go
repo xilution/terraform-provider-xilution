@@ -24,7 +24,7 @@ func dataSourceOrganization() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"iam_client_id": {
+			"auth_client_id": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -46,6 +46,18 @@ func dataSourceOrganization() *schema.Resource {
 			},
 			"modified_at": {
 				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"url": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"auto_auth": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"show_sign_up": {
+				Type:     schema.TypeBool,
 				Computed: true,
 			},
 		},
@@ -76,7 +88,7 @@ func dataSourceOrganizationRead(ctx context.Context, d *schema.ResourceData, m i
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("iam_client_id", organization.IamClientId); err != nil {
+	if err := d.Set("auth_client_id", organization.AuthClientId); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -100,7 +112,18 @@ func dataSourceOrganizationRead(ctx context.Context, d *schema.ResourceData, m i
 		return diag.FromErr(err)
 	}
 
-	// always run
+	if err := d.Set("url", organization.Url); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("auto_auth", organization.AutoAuth); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("show_sign_up", organization.ShowSignUp); err != nil {
+		return diag.FromErr(err)
+	}
+
 	d.SetId(organization.ID)
 
 	return diags

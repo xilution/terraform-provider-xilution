@@ -58,6 +58,11 @@ func dataSourceClient() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"secret": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Sensitive: true,
+			},
 		},
 	}
 }
@@ -115,7 +120,10 @@ func dataSourceClientRead(ctx context.Context, d *schema.ResourceData, m interfa
 		return diag.FromErr(err)
 	}
 
-	// always run
+	if err := d.Set("secret", client.Secret); err != nil {
+		return diag.FromErr(err)
+	}
+
 	d.SetId(client.ID)
 
 	return diags

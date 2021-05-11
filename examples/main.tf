@@ -43,3 +43,14 @@ data "xilution_user" "tbrunia" {
 output "xilution_user" {
   value = data.xilution_user.tbrunia
 }
+
+resource "xilution_git_account" "xilution_git_account" {
+  name            = "xilution"
+  git_provider    = "GIT_HUB"
+  organization_id = local.organization_id
+  owning_user_id  = local.user_id
+}
+
+output "xilution_git_account" {
+  value = xilution_git_account.xilution_git_account
+}

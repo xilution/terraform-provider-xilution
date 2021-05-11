@@ -38,6 +38,12 @@ func Provider() *schema.Provider {
 			"xilution_organization": dataSourceOrganization(),
 			"xilution_client":       dataSourceClient(),
 			"xilution_user":         dataSourceUser(),
+			"xilution_git_account":  dataSourceGitAccount(),
+		},
+		ResourcesMap: map[string]*schema.Resource{
+			"xilution_git_account": resourceGitAccount(),
+			// "xilution_git_repo":       resourceGitRepo(),
+			// "xilution_git_repo_event": resourceGitRepoEvent(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
@@ -62,7 +68,6 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 			})
 
 			return nil, diags
-
 		}
 
 		return xc, diags

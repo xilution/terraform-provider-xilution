@@ -40,4 +40,4 @@ clean:
 run_examples:
 	rm -rf .terraform.lock.hcl
 	terraform init ./examples/
-	terraform apply ./examples/
+	terraform apply -auto-approve ./examples/

@@ -1,8 +1,9 @@
 .idea
 .terraform
 .vscode
-vendor
+.env
 .terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
 coverage.out
+vendor

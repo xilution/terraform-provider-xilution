@@ -109,7 +109,6 @@ func dataSourceUserRead(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
-	// always run
 	d.SetId(user.ID)
 
 	return diags
