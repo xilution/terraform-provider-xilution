@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -35,21 +36,25 @@ func Provider() *schema.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"xilution_organization": dataSourceOrganization(),
-			"xilution_client":       dataSourceClient(),
-			"xilution_user":         dataSourceUser(),
-			"xilution_git_account":  dataSourceGitAccount(),
+			"xilution_organization":   dataSourceOrganization(),
+			"xilution_client":         dataSourceClient(),
+			"xilution_user":           dataSourceUser(),
+			"xilution_git_account":    dataSourceGitAccount(),
+			"xilution_git_repo":       dataSourceGitRepo(),
+			"xilution_git_repo_event": dataSourceGitRepoEvent(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"xilution_git_account": resourceGitAccount(),
-			// "xilution_git_repo":       resourceGitRepo(),
-			// "xilution_git_repo_event": resourceGitRepoEvent(),
+			"xilution_git_account":    resourceGitAccount(),
+			"xilution_git_repo":       resourceGitRepo(),
+			"xilution_git_repo_event": resourceGitRepoEvent(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
 }
 
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	log.Println("[INFO] Configuring Xilution Provider")
+
 	clientId := d.Get("client_id").(string)
 	organizationId := d.Get("organization_id").(string)
 	username := d.Get("username").(string)
