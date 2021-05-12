@@ -42,11 +42,13 @@ func Provider() *schema.Provider {
 			"xilution_git_account":    dataSourceGitAccount(),
 			"xilution_git_repo":       dataSourceGitRepo(),
 			"xilution_git_repo_event": dataSourceGitRepoEvent(),
+			"xilution_cloud_provider": dataSourceCloudProvider(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"xilution_git_account":    resourceGitAccount(),
 			"xilution_git_repo":       resourceGitRepo(),
 			"xilution_git_repo_event": resourceGitRepoEvent(),
+			"xilution_cloud_provider": resourceCloudProvider(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

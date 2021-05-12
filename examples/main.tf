@@ -51,8 +51,13 @@ resource "xilution_git_account" "xilution_git_account" {
   owning_user_id  = local.user_id
 }
 
+data "xilution_git_account" "xilution_git_account" {
+  id = xilution_git_account.xilution_git_account.id
+  organization_id = local.organization_id
+}
+
 output "xilution_git_account" {
-  value = xilution_git_account.xilution_git_account
+  value = data.xilution_git_account.xilution_git_account
 }
 
 resource "xilution_git_repo" "xilution_temp_git_repo" {
@@ -62,8 +67,14 @@ resource "xilution_git_repo" "xilution_temp_git_repo" {
   git_account_id  = xilution_git_account.xilution_git_account.id
 }
 
+data "xilution_git_repo" "xilution_temp_git_repo" {
+  id = xilution_git_repo.xilution_temp_git_repo.id
+  organization_id = local.organization_id
+  git_account_id  = xilution_git_account.xilution_git_account.id
+}
+
 output "xilution_git_repo" {
-  value = xilution_git_repo.xilution_temp_git_repo
+  value = data.xilution_git_repo.xilution_temp_git_repo
 }
 
 resource "xilution_git_repo_event" "xilution_temp_git_repo_event" {
@@ -82,13 +93,31 @@ resource "xilution_git_repo_event" "xilution_temp_git_repo_event" {
   })
 }
 
-output "xilution_temp_git_repo_event" {
-  value = xilution_git_repo_event.xilution_temp_git_repo_event
-}
-
 data "xilution_git_repo_event" "xilution_temp_git_repo_event" {
   id = xilution_git_repo_event.xilution_temp_git_repo_event.id
   organization_id = local.organization_id
   git_account_id  = xilution_git_account.xilution_git_account.id
   git_repo_id     = xilution_git_repo.xilution_temp_git_repo.id
+}
+
+output "xilution_temp_git_repo_event" {
+  value = data.xilution_git_repo_event.xilution_temp_git_repo_event
+}
+
+resource "xilution_cloud_provider" "xilution_aws_prod" {
+  organization_id = local.organization_id
+  owning_user_id  = local.user_id
+  name = "Xilution AWS (Prod)"
+  cloud_provider = "AWS"
+  account_id = "952573012699"
+  region = "us-east-1"
+}
+
+data "xilution_cloud_provider" "xilution_aws_prod" {
+  id = xilution_cloud_provider.xilution_aws_prod.id
+  organization_id = local.organization_id
+}
+
+output "xilution_aws_prod" {
+  value = data.xilution_cloud_provider.xilution_aws_prod
 }
