@@ -4,5 +4,5 @@ go 1.16
 
 require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.6.1
-	github.com/xilution/xilution-client-go v0.0.0-20210512220424-da838db5705a
+	github.com/xilution/xilution-client-go v0.0.0-20210513023434-5233ce36cb5c
 )

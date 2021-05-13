@@ -52,7 +52,7 @@ resource "xilution_git_account" "xilution_git_account" {
 }
 
 data "xilution_git_account" "xilution_git_account" {
-  id = xilution_git_account.xilution_git_account.id
+  id              = xilution_git_account.xilution_git_account.id
   organization_id = local.organization_id
 }
 
@@ -68,7 +68,7 @@ resource "xilution_git_repo" "xilution_temp_git_repo" {
 }
 
 data "xilution_git_repo" "xilution_temp_git_repo" {
-  id = xilution_git_repo.xilution_temp_git_repo.id
+  id              = xilution_git_repo.xilution_temp_git_repo.id
   organization_id = local.organization_id
   git_account_id  = xilution_git_account.xilution_git_account.id
 }
@@ -83,18 +83,18 @@ resource "xilution_git_repo_event" "xilution_temp_git_repo_event" {
   git_account_id  = xilution_git_account.xilution_git_account.id
   git_repo_id     = xilution_git_repo.xilution_temp_git_repo.id
   event_type      = "CREATE_REPO_FROM_TEMPLATE_REPO"
-  parameters      = jsonencode({
-    "sourceOwner": "xilution",
-    "sourceRepo": "xilution-bison-poc-template",
-    "description": "A new repo from a copy",
-    "commitMessage": "Initial repo setup",
-    "isPrivate": true,
-    "params": "{\"world\": \"planet\"}"
+  parameters = jsonencode({
+    "sourceOwner" : "xilution",
+    "sourceRepo" : "xilution-bison-poc-template",
+    "description" : "A new repo from a copy",
+    "commitMessage" : "Initial repo setup",
+    "isPrivate" : true,
+    "params" : "{\"world\": \"planet\"}"
   })
 }
 
 data "xilution_git_repo_event" "xilution_temp_git_repo_event" {
-  id = xilution_git_repo_event.xilution_temp_git_repo_event.id
+  id              = xilution_git_repo_event.xilution_temp_git_repo_event.id
   organization_id = local.organization_id
   git_account_id  = xilution_git_account.xilution_git_account.id
   git_repo_id     = xilution_git_repo.xilution_temp_git_repo.id
@@ -107,17 +107,78 @@ output "xilution_temp_git_repo_event" {
 resource "xilution_cloud_provider" "xilution_aws_prod" {
   organization_id = local.organization_id
   owning_user_id  = local.user_id
-  name = "Xilution AWS (Prod)"
-  cloud_provider = "AWS"
-  account_id = "952573012699"
-  region = "us-east-1"
+  name            = "Xilution AWS (Prod)"
+  cloud_provider  = "AWS"
+  account_id      = "952573012699"
+  region          = "us-east-1"
 }
 
 data "xilution_cloud_provider" "xilution_aws_prod" {
-  id = xilution_cloud_provider.xilution_aws_prod.id
+  id              = xilution_cloud_provider.xilution_aws_prod.id
   organization_id = local.organization_id
 }
 
 output "xilution_aws_prod" {
   value = data.xilution_cloud_provider.xilution_aws_prod
+}
+
+resource "xilution_vpc_pipeline" "xilution_vpc_pipeline" {
+  organization_id   = local.organization_id
+  owning_user_id    = local.user_id
+  pipeline_type     = "AWS_SMALL"
+  name              = "VPC 1"
+  cloud_provider_id = xilution_cloud_provider.xilution_aws_prod.id
+}
+
+data "xilution_vpc_pipeline" "xilution_vpc_pipeline" {
+  id              = xilution_vpc_pipeline.xilution_vpc_pipeline.id
+  organization_id = local.organization_id
+}
+
+output "xilution_vpc_pipeline" {
+  value = data.xilution_vpc_pipeline.xilution_vpc_pipeline
+}
+
+# resource "xilution_k8s_pipeline" "xilution_k8s_pipeline" {
+#   organization_id   = local.organization_id
+#   owning_user_id    = local.user_id
+#   pipeline_type     = "AWS_SMALL"
+#   name              = "K8S 1"
+#   vpc_pipeline_id = xilution_vpc_pipeline.xilution_vpc_pipeline.id
+# }
+
+# data "xilution_k8s_pipeline" "xilution_k8s_pipeline" {
+#   id              = xilution_k8s_pipeline.xilution_k8s_pipeline.id
+#   organization_id = local.organization_id
+# }
+
+# output "xilution_k8s_pipeline" {
+#   value = data.xilution_k8s_pipeline.xilution_k8s_pipeline
+# }
+
+resource "xilution_static_content_pipeline" "xilution_static_content_pipeline" {
+  organization_id   = local.organization_id
+  owning_user_id    = local.user_id
+  pipeline_type     = "AWS_SMALL"
+  name              = "Static Site 1"
+  cloud_provider_id = xilution_cloud_provider.xilution_aws_prod.id
+  stages = [
+    {
+      name = "test"
+    },
+    {
+      name = "prod"
+    },
+  ]
+  git_repo_id = xilution_git_repo.xilution_temp_git_repo.id
+  branch      = "master"
+}
+
+data "xilution_static_content_pipeline" "xilution_static_content_pipeline" {
+  id              = xilution_static_content_pipeline.xilution_static_content_pipeline.id
+  organization_id = local.organization_id
+}
+
+output "xilution_static_content_pipeline" {
+  value = data.xilution_static_content_pipeline.xilution_static_content_pipeline
 }
