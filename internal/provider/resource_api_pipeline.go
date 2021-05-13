@@ -82,7 +82,14 @@ func resourceApiPipelineCreate(ctx context.Context, d *schema.ResourceData, m in
 	vpcPipelineId := d.Get("vpc_pipeline_id").(string)
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
-	stages := d.Get("stages").([]xc.Stage)
+	stages := d.Get("stages").([]interface{})
+	mappedStages := []xc.Stage{}
+	for _, stage := range stages {
+		newStage := xc.Stage {
+			Name: stage.(map[string]interface{})["name"].(string),
+		}
+		mappedStages = append(mappedStages, newStage)
+	}
 	organizationId := d.Get("organization_id").(string)
 	owningUserId := d.Get("owning_user_id").(string)
 
@@ -93,7 +100,7 @@ func resourceApiPipelineCreate(ctx context.Context, d *schema.ResourceData, m in
 		VpcPipelineId:  vpcPipelineId,
 		GitRepoId:      gitRepoId,
 		Branch:         branch,
-		Stages:         stages,
+		Stages:         mappedStages,
 		OrganizationId: organizationId,
 		OwningUserId:   owningUserId,
 	})
@@ -159,7 +166,14 @@ func resourceApiPipelineRead(ctx context.Context, d *schema.ResourceData, m inte
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("stages", apiPipeline.Stages); err != nil {
+	stages := make([]interface{}, len(apiPipeline.Stages))
+	for i, stage := range apiPipeline.Stages {
+		newStage := make(map[string]interface{})
+
+		newStage["name"] = stage.Name
+		stages[i] = newStage
+	}
+	if err := d.Set("stages", stages); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -191,7 +205,14 @@ func resourceApiPipelineUpdate(ctx context.Context, d *schema.ResourceData, m in
 	vpcPipelineId := d.Get("vpc_pipeline_id").(string)
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
-	stages := d.Get("stages").([]xc.Stage)
+	stages := d.Get("stages").([]interface{})
+	mappedStages := []xc.Stage{}
+	for _, stage := range stages {
+		newStage := xc.Stage {
+			Name: stage.(map[string]interface{})["name"].(string),
+		}
+		mappedStages = append(mappedStages, newStage)
+	}
 	organizationId := d.Get("organization_id").(string)
 	owningUserId := d.Get("owning_user_id").(string)
 
@@ -204,7 +225,7 @@ func resourceApiPipelineUpdate(ctx context.Context, d *schema.ResourceData, m in
 			VpcPipelineId:  vpcPipelineId,
 			GitRepoId:      gitRepoId,
 			Branch:         branch,
-			Stages:         stages,
+			Stages:         mappedStages,
 			OrganizationId: organizationId,
 			OwningUserId:   owningUserId,
 		})

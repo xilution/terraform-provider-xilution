@@ -18,6 +18,8 @@ provider "xilution" {
   client_id       = local.client_id
 }
 
+# Xilution Organization
+
 data "xilution_organization" "xilution" {
   id = local.organization_id
 }
@@ -25,6 +27,8 @@ data "xilution_organization" "xilution" {
 output "xilution_organization" {
   value = data.xilution_organization.xilution
 }
+
+# Xilution Client
 
 data "xilution_client" "terraform_client" {
   id              = local.client_id
@@ -35,6 +39,8 @@ output "xilution_client" {
   value = data.xilution_client.terraform_client
 }
 
+# Xilution User
+
 data "xilution_user" "tbrunia" {
   id              = local.user_id
   organization_id = local.organization_id
@@ -43,6 +49,8 @@ data "xilution_user" "tbrunia" {
 output "xilution_user" {
   value = data.xilution_user.tbrunia
 }
+
+# Xilution Git Account
 
 resource "xilution_git_account" "xilution_git_account" {
   name            = "xilution"
@@ -60,6 +68,8 @@ output "xilution_git_account" {
   value = data.xilution_git_account.xilution_git_account
 }
 
+# Xilution Git Repo
+
 resource "xilution_git_repo" "xilution_temp_git_repo" {
   name            = "xilution-temp"
   organization_id = local.organization_id
@@ -76,6 +86,8 @@ data "xilution_git_repo" "xilution_temp_git_repo" {
 output "xilution_git_repo" {
   value = data.xilution_git_repo.xilution_temp_git_repo
 }
+
+# Xilution Git Repo Event
 
 resource "xilution_git_repo_event" "xilution_temp_git_repo_event" {
   organization_id = local.organization_id
@@ -104,6 +116,8 @@ output "xilution_temp_git_repo_event" {
   value = data.xilution_git_repo_event.xilution_temp_git_repo_event
 }
 
+# Xilution Cloud Provider
+
 resource "xilution_cloud_provider" "xilution_aws_prod" {
   organization_id = local.organization_id
   owning_user_id  = local.user_id
@@ -122,6 +136,8 @@ output "xilution_aws_prod" {
   value = data.xilution_cloud_provider.xilution_aws_prod
 }
 
+# Xilution VPC Pipeline
+
 resource "xilution_vpc_pipeline" "xilution_vpc_pipeline" {
   organization_id   = local.organization_id
   owning_user_id    = local.user_id
@@ -138,6 +154,8 @@ data "xilution_vpc_pipeline" "xilution_vpc_pipeline" {
 output "xilution_vpc_pipeline" {
   value = data.xilution_vpc_pipeline.xilution_vpc_pipeline
 }
+
+# Xilution K8s Pipeline
 
 # resource "xilution_k8s_pipeline" "xilution_k8s_pipeline" {
 #   organization_id   = local.organization_id
@@ -156,20 +174,20 @@ output "xilution_vpc_pipeline" {
 #   value = data.xilution_k8s_pipeline.xilution_k8s_pipeline
 # }
 
+# Xilution Static Content Pipeline
+
 resource "xilution_static_content_pipeline" "xilution_static_content_pipeline" {
   organization_id   = local.organization_id
   owning_user_id    = local.user_id
   pipeline_type     = "AWS_SMALL"
   name              = "Static Site 1"
   cloud_provider_id = xilution_cloud_provider.xilution_aws_prod.id
-  stages = [
-    {
-      name = "test"
-    },
-    {
-      name = "prod"
-    },
-  ]
+  stages {
+    name = "test"
+  }
+  stages {
+    name = "prod"
+  }
   git_repo_id = xilution_git_repo.xilution_temp_git_repo.id
   branch      = "master"
 }
@@ -182,3 +200,30 @@ data "xilution_static_content_pipeline" "xilution_static_content_pipeline" {
 output "xilution_static_content_pipeline" {
   value = data.xilution_static_content_pipeline.xilution_static_content_pipeline
 }
+
+# Xilution API Pipeline
+
+# resource "xilution_api_pipeline" "xilution_api_pipeline" {
+#   organization_id = local.organization_id
+#   owning_user_id  = local.user_id
+#   pipeline_type   = "AWS_SMALL"
+#   name            = "Api 1"
+#   vpc_pipeline_id = xilution_vpc_pipeline.xilution_vpc_pipeline.id
+#   stages {
+#     name = "test"
+#   }
+#   stages {
+#     name = "prod"
+#   }
+#   git_repo_id = xilution_git_repo.xilution_temp_git_repo.id
+#   branch      = "master"
+# }
+
+# data "xilution_api_pipeline" "xilution_api_pipeline" {
+#   id              = xilution_api_pipeline.xilution_api_pipeline.id
+#   organization_id = local.organization_id
+# }
+
+# output "xilution_api_pipeline" {
+#   value = data.xilution_api_pipeline.xilution_api_pipeline
+# }

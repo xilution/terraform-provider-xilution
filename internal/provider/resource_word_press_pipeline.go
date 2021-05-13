@@ -82,7 +82,14 @@ func resourceWordPressPipelineCreate(ctx context.Context, d *schema.ResourceData
 	k8sPipelineId := d.Get("k8s_pipeline_id").(string)
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
-	stages := d.Get("stages").([]xc.Stage)
+	stages := d.Get("stages").([]interface{})
+	mappedStages := []xc.Stage{}
+	for _, stage := range stages {
+		newStage := xc.Stage {
+			Name: stage.(map[string]interface{})["name"].(string),
+		}
+		mappedStages = append(mappedStages, newStage)
+	}
 	organizationId := d.Get("organization_id").(string)
 	owningUserId := d.Get("owning_user_id").(string)
 
@@ -93,7 +100,7 @@ func resourceWordPressPipelineCreate(ctx context.Context, d *schema.ResourceData
 		K8sPipelineId:  k8sPipelineId,
 		GitRepoId:      gitRepoId,
 		Branch:         branch,
-		Stages:         stages,
+		Stages:         mappedStages,
 		OrganizationId: organizationId,
 		OwningUserId:   owningUserId,
 	})
@@ -159,7 +166,14 @@ func resourceWordPressPipelineRead(ctx context.Context, d *schema.ResourceData, 
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("stages", wordPressPipeline.Stages); err != nil {
+	stages := make([]interface{}, len(wordPressPipeline.Stages))
+	for i, stage := range wordPressPipeline.Stages {
+		newStage := make(map[string]interface{})
+
+		newStage["name"] = stage.Name
+		stages[i] = newStage
+	}
+	if err := d.Set("stages", stages); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -191,7 +205,14 @@ func resourceWordPressPipelineUpdate(ctx context.Context, d *schema.ResourceData
 	k8sPipelineId := d.Get("k8s_pipeline_id").(string)
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
-	stages := d.Get("stages").([]xc.Stage)
+	stages := d.Get("stages").([]interface{})
+	mappedStages := []xc.Stage{}
+	for _, stage := range stages {
+		newStage := xc.Stage {
+			Name: stage.(map[string]interface{})["name"].(string),
+		}
+		mappedStages = append(mappedStages, newStage)
+	}
 	organizationId := d.Get("organization_id").(string)
 	owningUserId := d.Get("owning_user_id").(string)
 
@@ -204,7 +225,7 @@ func resourceWordPressPipelineUpdate(ctx context.Context, d *schema.ResourceData
 			K8sPipelineId:  k8sPipelineId,
 			GitRepoId:      gitRepoId,
 			Branch:         branch,
-			Stages:         stages,
+			Stages:         mappedStages,
 			OrganizationId: organizationId,
 			OwningUserId:   owningUserId,
 		})

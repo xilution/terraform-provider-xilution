@@ -42,11 +42,11 @@ func dataSourceApiPipeline() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"name": {
 							Type:     schema.TypeString,
-							Required: true,
+							Computed: true,
 						},
 					},
 				},
-				Required: true,
+				Computed: true,
 			},
 			"organization_id": {
 				Type:     schema.TypeString,
@@ -101,7 +101,14 @@ func dataSourceApiPipelineRead(ctx context.Context, d *schema.ResourceData, m in
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("stages", apiPipeline.Stages); err != nil {
+	stages := make([]interface{}, len(apiPipeline.Stages))
+	for i, stage := range apiPipeline.Stages {
+		newStage := make(map[string]interface{})
+
+		newStage["name"] = stage.Name
+		stages[i] = newStage
+	}
+	if err := d.Set("stages", stages); err != nil {
 		return diag.FromErr(err)
 	}
 

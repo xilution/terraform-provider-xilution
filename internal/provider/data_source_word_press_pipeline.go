@@ -42,11 +42,11 @@ func dataSourceWordPressPipeline() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"name": {
 							Type:     schema.TypeString,
-							Required: true,
+							Computed: true,
 						},
 					},
 				},
-				Required: true,
+				Computed: true,
 			},
 			"organization_id": {
 				Type:     schema.TypeString,
@@ -101,7 +101,14 @@ func dataSourceWordPressPipelineRead(ctx context.Context, d *schema.ResourceData
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("stages", wordPressPipeline.Stages); err != nil {
+	stages := make([]interface{}, len(wordPressPipeline.Stages))
+	for i, stage := range wordPressPipeline.Stages {
+		newStage := make(map[string]interface{})
+
+		newStage["name"] = stage.Name
+		stages[i] = newStage
+	}
+	if err := d.Set("stages", stages); err != nil {
 		return diag.FromErr(err)
 	}
 

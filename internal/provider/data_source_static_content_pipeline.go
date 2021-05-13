@@ -42,11 +42,11 @@ func dataSourceStaticContentPipeline() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"name": {
 							Type:     schema.TypeString,
-							Required: true,
+							Computed: true,
 						},
 					},
 				},
-				Required: true,
+				Computed: true,
 			},
 			"organization_id": {
 				Type:     schema.TypeString,
@@ -100,8 +100,15 @@ func dataSourceStaticContentPipelineRead(ctx context.Context, d *schema.Resource
 	if err := d.Set("git_repo_id", staticContentPipeline.GitRepoId); err != nil {
 		return diag.FromErr(err)
 	}
+	
+	stages := make([]interface{}, len(staticContentPipeline.Stages))
+	for i, stage := range staticContentPipeline.Stages {
+		newStage := make(map[string]interface{})
 
-	if err := d.Set("stages", staticContentPipeline.Stages); err != nil {
+		newStage["name"] = stage.Name
+		stages[i] = newStage
+	}
+	if err := d.Set("stages", stages); err != nil {
 		return diag.FromErr(err)
 	}
 
