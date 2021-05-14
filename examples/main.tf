@@ -157,22 +157,49 @@ output "xilution_vpc_pipeline" {
 
 # Xilution K8s Pipeline
 
-# resource "xilution_k8s_pipeline" "xilution_k8s_pipeline" {
-#   organization_id   = local.organization_id
-#   owning_user_id    = local.user_id
-#   pipeline_type     = "AWS_SMALL"
-#   name              = "K8S 1"
-#   vpc_pipeline_id = xilution_vpc_pipeline.xilution_vpc_pipeline.id
-# }
+resource "xilution_k8s_pipeline" "xilution_k8s_pipeline" {
+  organization_id   = local.organization_id
+  owning_user_id    = local.user_id
+  pipeline_type     = "AWS_SMALL"
+  name              = "K8S 1"
+  vpc_pipeline_id = xilution_vpc_pipeline.xilution_vpc_pipeline.id
+}
 
-# data "xilution_k8s_pipeline" "xilution_k8s_pipeline" {
-#   id              = xilution_k8s_pipeline.xilution_k8s_pipeline.id
-#   organization_id = local.organization_id
-# }
+data "xilution_k8s_pipeline" "xilution_k8s_pipeline" {
+  id              = xilution_k8s_pipeline.xilution_k8s_pipeline.id
+  organization_id = local.organization_id
+}
 
-# output "xilution_k8s_pipeline" {
-#   value = data.xilution_k8s_pipeline.xilution_k8s_pipeline
-# }
+output "xilution_k8s_pipeline" {
+  value = data.xilution_k8s_pipeline.xilution_k8s_pipeline
+}
+
+# Xilution WordPress Pipeline
+
+resource "xilution_word_press_pipeline" "xilution_word_press_pipeline" {
+  organization_id   = local.organization_id
+  owning_user_id    = local.user_id
+  pipeline_type     = "AWS_SMALL"
+  name              = "WordPress 1"
+  k8s_pipeline_id = xilution_k8s_pipeline.xilution_k8s_pipeline.id
+  stages {
+    name = "test"
+  }
+  stages {
+    name = "prod"
+  }
+  git_repo_id = xilution_git_repo.xilution_temp_git_repo.id
+  branch      = "master"
+}
+
+data "xilution_word_press_pipeline" "xilution_word_press_pipeline" {
+  id              = xilution_word_press_pipeline.xilution_word_press_pipeline.id
+  organization_id = local.organization_id
+}
+
+output "xilution_word_press_pipeline" {
+  value = data.xilution_word_press_pipeline.xilution_word_press_pipeline
+}
 
 # Xilution Static Content Pipeline
 
@@ -203,27 +230,27 @@ output "xilution_static_content_pipeline" {
 
 # Xilution API Pipeline
 
-# resource "xilution_api_pipeline" "xilution_api_pipeline" {
-#   organization_id = local.organization_id
-#   owning_user_id  = local.user_id
-#   pipeline_type   = "AWS_SMALL"
-#   name            = "Api 1"
-#   vpc_pipeline_id = xilution_vpc_pipeline.xilution_vpc_pipeline.id
-#   stages {
-#     name = "test"
-#   }
-#   stages {
-#     name = "prod"
-#   }
-#   git_repo_id = xilution_git_repo.xilution_temp_git_repo.id
-#   branch      = "master"
-# }
+resource "xilution_api_pipeline" "xilution_api_pipeline" {
+  organization_id = local.organization_id
+  owning_user_id  = local.user_id
+  pipeline_type   = "AWS_SMALL"
+  name            = "API 1"
+  vpc_pipeline_id = xilution_vpc_pipeline.xilution_vpc_pipeline.id
+  stages {
+    name = "test"
+  }
+  stages {
+    name = "prod"
+  }
+  git_repo_id = xilution_git_repo.xilution_temp_git_repo.id
+  branch      = "master"
+}
 
-# data "xilution_api_pipeline" "xilution_api_pipeline" {
-#   id              = xilution_api_pipeline.xilution_api_pipeline.id
-#   organization_id = local.organization_id
-# }
+data "xilution_api_pipeline" "xilution_api_pipeline" {
+  id              = xilution_api_pipeline.xilution_api_pipeline.id
+  organization_id = local.organization_id
+}
 
-# output "xilution_api_pipeline" {
-#   value = data.xilution_api_pipeline.xilution_api_pipeline
-# }
+output "xilution_api_pipeline" {
+  value = data.xilution_api_pipeline.xilution_api_pipeline
+}
