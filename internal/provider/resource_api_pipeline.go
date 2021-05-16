@@ -83,9 +83,9 @@ func resourceApiPipelineCreate(ctx context.Context, d *schema.ResourceData, m in
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
 	stages := d.Get("stages").([]interface{})
-	mappedStages := []xc.Stage{}
+	mappedStages := []xc.ApiStage{}
 	for _, stage := range stages {
-		newStage := xc.Stage {
+		newStage := xc.ApiStage {
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)
@@ -206,9 +206,9 @@ func resourceApiPipelineUpdate(ctx context.Context, d *schema.ResourceData, m in
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
 	stages := d.Get("stages").([]interface{})
-	mappedStages := []xc.Stage{}
+	mappedStages := []xc.ApiStage{}
 	for _, stage := range stages {
-		newStage := xc.Stage {
+		newStage := xc.ApiStage {
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)

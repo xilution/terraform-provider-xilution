@@ -83,9 +83,9 @@ func resourceWordPressPipelineCreate(ctx context.Context, d *schema.ResourceData
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
 	stages := d.Get("stages").([]interface{})
-	mappedStages := []xc.Stage{}
+	mappedStages := []xc.WordPressStage{}
 	for _, stage := range stages {
-		newStage := xc.Stage {
+		newStage := xc.WordPressStage {
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)
@@ -206,9 +206,9 @@ func resourceWordPressPipelineUpdate(ctx context.Context, d *schema.ResourceData
 	gitRepoId := d.Get("git_repo_id").(string)
 	branch := d.Get("branch").(string)
 	stages := d.Get("stages").([]interface{})
-	mappedStages := []xc.Stage{}
+	mappedStages := []xc.WordPressStage{}
 	for _, stage := range stages {
-		newStage := xc.Stage {
+		newStage := xc.WordPressStage {
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)

@@ -47,6 +47,7 @@ func dataSourceWordPressPipeline() *schema.Resource {
 					},
 				},
 				Computed: true,
+				Optional: true,
 			},
 			"organization_id": {
 				Type:     schema.TypeString,

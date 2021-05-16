@@ -299,6 +299,8 @@ github.com/xilution/xilution-client-go v0.0.0-20210512220424-da838db5705a h1:EC1
 github.com/xilution/xilution-client-go v0.0.0-20210512220424-da838db5705a/go.mod h1:srKt3z1dxmWkPXKjLkpNiXr2mzp03b0/jjEOjgi3M4E=
 github.com/xilution/xilution-client-go v0.0.0-20210513023434-5233ce36cb5c h1:e7h+OvlL7UiXV1s7H2mo42K+AZbD2fifGYDzScjl+vc=
 github.com/xilution/xilution-client-go v0.0.0-20210513023434-5233ce36cb5c/go.mod h1:srKt3z1dxmWkPXKjLkpNiXr2mzp03b0/jjEOjgi3M4E=
+github.com/xilution/xilution-client-go v0.0.0-20210516141512-8e7b49234826 h1:lTjm/KaDtDoyvb302NUu5dp/JqMv8PLGSdTAWIyuRhg=
+github.com/xilution/xilution-client-go v0.0.0-20210516141512-8e7b49234826/go.mod h1:srKt3z1dxmWkPXKjLkpNiXr2mzp03b0/jjEOjgi3M4E=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
