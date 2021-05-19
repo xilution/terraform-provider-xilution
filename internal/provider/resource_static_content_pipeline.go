@@ -85,7 +85,7 @@ func resourceStaticContentPipelineCreate(ctx context.Context, d *schema.Resource
 	stages := d.Get("stages").([]interface{})
 	mappedStages := []xc.StaticContentStage{}
 	for _, stage := range stages {
-		newStage := xc.StaticContentStage {
+		newStage := xc.StaticContentStage{
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)
@@ -208,7 +208,7 @@ func resourceStaticContentPipelineUpdate(ctx context.Context, d *schema.Resource
 	stages := d.Get("stages").([]interface{})
 	mappedStages := []xc.StaticContentStage{}
 	for _, stage := range stages {
-		newStage := xc.StaticContentStage {
+		newStage := xc.StaticContentStage{
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)

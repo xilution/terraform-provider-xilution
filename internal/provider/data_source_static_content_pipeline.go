@@ -101,7 +101,7 @@ func dataSourceStaticContentPipelineRead(ctx context.Context, d *schema.Resource
 	if err := d.Set("git_repo_id", staticContentPipeline.GitRepoId); err != nil {
 		return diag.FromErr(err)
 	}
-	
+
 	stages := make([]interface{}, len(staticContentPipeline.Stages))
 	for i, stage := range staticContentPipeline.Stages {
 		newStage := make(map[string]interface{})

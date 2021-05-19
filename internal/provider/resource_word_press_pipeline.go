@@ -85,7 +85,7 @@ func resourceWordPressPipelineCreate(ctx context.Context, d *schema.ResourceData
 	stages := d.Get("stages").([]interface{})
 	mappedStages := []xc.WordPressStage{}
 	for _, stage := range stages {
-		newStage := xc.WordPressStage {
+		newStage := xc.WordPressStage{
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)
@@ -208,7 +208,7 @@ func resourceWordPressPipelineUpdate(ctx context.Context, d *schema.ResourceData
 	stages := d.Get("stages").([]interface{})
 	mappedStages := []xc.WordPressStage{}
 	for _, stage := range stages {
-		newStage := xc.WordPressStage {
+		newStage := xc.WordPressStage{
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)

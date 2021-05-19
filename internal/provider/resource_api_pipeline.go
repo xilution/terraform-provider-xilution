@@ -85,7 +85,7 @@ func resourceApiPipelineCreate(ctx context.Context, d *schema.ResourceData, m in
 	stages := d.Get("stages").([]interface{})
 	mappedStages := []xc.ApiStage{}
 	for _, stage := range stages {
-		newStage := xc.ApiStage {
+		newStage := xc.ApiStage{
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)
@@ -208,7 +208,7 @@ func resourceApiPipelineUpdate(ctx context.Context, d *schema.ResourceData, m in
 	stages := d.Get("stages").([]interface{})
 	mappedStages := []xc.ApiStage{}
 	for _, stage := range stages {
-		newStage := xc.ApiStage {
+		newStage := xc.ApiStage{
 			Name: stage.(map[string]interface{})["name"].(string),
 		}
 		mappedStages = append(mappedStages, newStage)
