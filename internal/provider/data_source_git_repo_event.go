@@ -19,11 +19,11 @@ func dataSourceGitRepoEvent() *schema.Resource {
 			},
 			"git_account_id": {
 				Type:     schema.TypeString,
-				Required: true,
+				Computed: true,
 			},
 			"git_repo_id": {
 				Type:     schema.TypeString,
-				Required: true,
+				Computed: true,
 			},
 			"organization_id": {
 				Type:     schema.TypeString,
@@ -59,11 +59,9 @@ func dataSourceGitRepoEventRead(ctx context.Context, d *schema.ResourceData, m i
 	var diags diag.Diagnostics
 
 	organizationId := d.Get("organization_id").(string)
-	gitAccountId := d.Get("git_account_id").(string)
-	gitRepoId := d.Get("git_repo_id").(string)
 	gitRepoEventId := d.Get("id").(string)
 
-	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, &gitAccountId, &gitRepoId, &gitRepoEventId)
+	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, &gitRepoEventId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

@@ -58,7 +58,7 @@ func resourceGitRepoCreate(ctx context.Context, d *schema.ResourceData, m interf
 	gitAccountId := d.Get("git_account_id").(string)
 	owningUserId := d.Get("owning_user_id").(string)
 
-	location, err := c.CreateGitRepo(&organizationId, &gitAccountId, &xc.GitRepo{
+	location, err := c.CreateGitRepo(&organizationId, &xc.GitRepo{
 		Type:           "git-repo",
 		Name:           name,
 		GitAccountId:   gitAccountId,
@@ -74,7 +74,7 @@ func resourceGitRepoCreate(ctx context.Context, d *schema.ResourceData, m interf
 
 	d.SetId(id)
 
-	gitRepo, err := c.GetGitRepo(&organizationId, &gitAccountId, &id)
+	gitRepo, err := c.GetGitRepo(&organizationId, &id)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -96,10 +96,9 @@ func resourceGitRepoRead(ctx context.Context, d *schema.ResourceData, m interfac
 	var diags diag.Diagnostics
 
 	organizationId := d.Get("organization_id").(string)
-	gitAccountId := d.Get("git_account_id").(string)
 	id := d.Id()
 
-	gitRepo, err := c.GetGitRepo(&organizationId, &gitAccountId, &id)
+	gitRepo, err := c.GetGitRepo(&organizationId, &id)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -145,7 +144,7 @@ func resourceGitRepoUpdate(ctx context.Context, d *schema.ResourceData, m interf
 	owningUserId := d.Get("owning_user_id").(string)
 
 	if d.HasChange("name") {
-		err := c.UpdateGitRepo(&organizationId, &gitAccountId, &xc.GitRepo{
+		err := c.UpdateGitRepo(&organizationId, &xc.GitRepo{
 			Type:           "git-repo",
 			ID:             id,
 			Name:           name,
@@ -167,10 +166,9 @@ func resourceGitRepoDelete(ctx context.Context, d *schema.ResourceData, m interf
 	var diags diag.Diagnostics
 
 	organizationId := d.Get("organization_id").(string)
-	gitAccountId := d.Get("git_account_id").(string)
 	id := d.Id()
 
-	err := c.DeleteGitRepo(&organizationId, &gitAccountId, &id)
+	err := c.DeleteGitRepo(&organizationId, &id)
 	if err != nil {
 		return diag.FromErr(err)
 	}

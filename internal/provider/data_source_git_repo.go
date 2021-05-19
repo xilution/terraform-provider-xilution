@@ -22,7 +22,7 @@ func dataSourceGitRepo() *schema.Resource {
 			},
 			"git_account_id": {
 				Type:     schema.TypeString,
-				Required: true,
+				Computed: true,
 			},
 			"organization_id": {
 				Type:     schema.TypeString,
@@ -50,10 +50,9 @@ func dataSourceGitRepoRead(ctx context.Context, d *schema.ResourceData, m interf
 	var diags diag.Diagnostics
 
 	organizationId := d.Get("organization_id").(string)
-	gitAccountId := d.Get("git_account_id").(string)
 	gitRepoId := d.Get("id").(string)
 
-	gitRepo, err := c.GetGitRepo(&organizationId, &gitAccountId, &gitRepoId)
+	gitRepo, err := c.GetGitRepo(&organizationId, &gitRepoId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

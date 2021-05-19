@@ -80,7 +80,6 @@ resource "xilution_git_repo" "xilution_temp_git_repo" {
 data "xilution_git_repo" "xilution_temp_git_repo" {
   id              = xilution_git_repo.xilution_temp_git_repo.id
   organization_id = local.organization_id
-  git_account_id  = xilution_git_account.xilution_git_account.id
 }
 
 output "xilution_git_repo" {
@@ -108,8 +107,6 @@ resource "xilution_git_repo_event" "xilution_temp_git_repo_event" {
 data "xilution_git_repo_event" "xilution_temp_git_repo_event" {
   id              = xilution_git_repo_event.xilution_temp_git_repo_event.id
   organization_id = local.organization_id
-  git_account_id  = xilution_git_account.xilution_git_account.id
-  git_repo_id     = xilution_git_repo.xilution_temp_git_repo.id
 }
 
 output "xilution_temp_git_repo_event" {

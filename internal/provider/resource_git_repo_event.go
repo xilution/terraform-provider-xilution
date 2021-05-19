@@ -76,7 +76,7 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 
 	eventType := d.Get("event_type").(string)
 
-	location, err := c.CreateGitRepoEvent(&organizationId, &gitAccountId, &gitRepoId, &xc.GitRepoEvent{
+	location, err := c.CreateGitRepoEvent(&organizationId, &xc.GitRepoEvent{
 		Type:           "git-repo-event",
 		GitAccountId:   gitAccountId,
 		GitRepoId:      gitRepoId,
@@ -94,7 +94,7 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 
 	d.SetId(id)
 
-	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, &gitAccountId, &gitRepoId, &id)
+	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, &id)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -116,11 +116,9 @@ func resourceGitRepoEventRead(ctx context.Context, d *schema.ResourceData, m int
 	var diags diag.Diagnostics
 
 	organizationId := d.Get("organization_id").(string)
-	gitAccountId := d.Get("git_account_id").(string)
-	gitRepoId := d.Get("git_repo_id").(string)
 	id := d.Id()
 
-	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, &gitAccountId, &gitRepoId, &id)
+	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, &id)
 	if err != nil {
 		return diag.FromErr(err)
 	}
