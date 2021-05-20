@@ -2,7 +2,6 @@ package provider
 
 import (
 	"context"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -75,12 +74,11 @@ func resourceVpcPipelineCreate(ctx context.Context, d *schema.ResourceData, m in
 		return diag.FromErr(err)
 	}
 
-	index := strings.LastIndex(*location, "/")
-	id := string((*location)[(index + 1):])
+	id := getIdFromLocationUrl(location)
 
-	d.SetId(id)
+	d.SetId(*id)
 
-	vpcPipeline, err := c.GetVpcPipeline(&organizationId, &id)
+	vpcPipeline, err := c.GetVpcPipeline(&organizationId, id)
 	if err != nil {
 		return diag.FromErr(err)
 	}

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"log"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -89,12 +88,11 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 		return diag.FromErr(err)
 	}
 
-	index := strings.LastIndex(*location, "/")
-	id := string((*location)[(index + 1):])
+	id := getIdFromLocationUrl(location)
 
-	d.SetId(id)
+	d.SetId(*id)
 
-	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, &id)
+	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, id)
 	if err != nil {
 		return diag.FromErr(err)
 	}

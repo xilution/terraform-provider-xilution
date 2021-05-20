@@ -2,7 +2,6 @@ package provider
 
 import (
 	"context"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -69,12 +68,11 @@ func resourceGitAccountCreate(ctx context.Context, d *schema.ResourceData, m int
 		return diag.FromErr(err)
 	}
 
-	index := strings.LastIndex(*location, "/")
-	id := string((*location)[(index + 1):])
+	id := getIdFromLocationUrl(location)
 
-	d.SetId(id)
+	d.SetId(*id)
 
-	gitAccount, err := c.GetGitAccount(&organizationId, &id)
+	gitAccount, err := c.GetGitAccount(&organizationId, id)
 	if err != nil {
 		return diag.FromErr(err)
 	}
