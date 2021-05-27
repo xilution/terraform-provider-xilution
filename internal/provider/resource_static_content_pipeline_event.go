@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -85,6 +86,26 @@ func resourceStaticContentPipelineEventCreate(ctx context.Context, d *schema.Res
 	id := getIdFromLocationUrl(location)
 
 	d.SetId(*id)
+
+	timeoutInMinutes := 15.0
+	done := false
+	start := time.Now()
+	for !done {
+		pipeline, err := c.GetStaticContentPipeline(&organizationId, id)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		status := pipeline.Status.ContinuousIntegrationStatus.LatestUpExecutionStatus
+		log.Println("[DEBUG] Static Content Pipeline Status is ", status)
+		if (status == "SUCCEEDED") {
+			done = true
+		} else {
+			if (time.Since(start).Minutes() > timeoutInMinutes) {
+				return diag.FromErr(err)
+			}
+    		time.Sleep(5 * time.Second)
+		}
+	}
 
 	staticcontentPipelineEvent, err := c.GetStaticContentPipelineEvent(&organizationId, id)
 	if err != nil {

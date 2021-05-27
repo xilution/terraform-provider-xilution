@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -85,6 +86,26 @@ func resourceApiPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 	id := getIdFromLocationUrl(location)
 
 	d.SetId(*id)
+
+	timeoutInMinutes := 10.0
+	done := false
+	start := time.Now()
+	for !done {
+		pipeline, err := c.GetApiPipeline(&organizationId, id)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		status := pipeline.Status.ContinuousIntegrationStatus.LatestUpExecutionStatus
+		log.Println("[DEBUG] API Pipeline Status is ", status)
+		if (status == "SUCCEEDED") {
+			done = true
+		} else {
+			if (time.Since(start).Minutes() > timeoutInMinutes) {
+				return diag.FromErr(err)
+			}
+    		time.Sleep(5 * time.Second)
+		}
+	}
 
 	apiPipelineEvent, err := c.GetApiPipelineEvent(&organizationId, id)
 	if err != nil {

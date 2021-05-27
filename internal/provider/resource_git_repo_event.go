@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -91,6 +92,26 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 	id := getIdFromLocationUrl(location)
 
 	d.SetId(*id)
+
+	timeoutInMinutes := 15.0
+	done := false
+	start := time.Now()
+	for !done {
+		gitRepo, err := c.GetGitRepo(&organizationId, id)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		status := gitRepo.Status
+		log.Println("[DEBUG] Git Repo Status is ", status)
+		if (status == "ACTIVE") {
+			done = true
+		} else {
+			if (time.Since(start).Minutes() > timeoutInMinutes) {
+				return diag.FromErr(err)
+			}
+    		time.Sleep(5 * time.Second)
+		}
+	}
 
 	gitRepoEvent, err := c.GetGitRepoEvent(&organizationId, id)
 	if err != nil {
