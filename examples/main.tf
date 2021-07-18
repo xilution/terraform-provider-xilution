@@ -2,7 +2,7 @@ terraform {
   required_providers {
     xilution = {
       version = "0.1"
-      source  = "xilution.com/general/xilution"
+      source  = "xilution.com/xilution/xilution"
     }
   }
 }

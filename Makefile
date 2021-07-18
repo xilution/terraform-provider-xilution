@@ -1,5 +1,5 @@
 HOSTNAME=xilution.com
-NAMESPACE=general
+NAMESPACE=xilution
 NAME=xilution
 BINARY=terraform-provider-${NAME}
 VERSION=0.1
@@ -28,7 +28,7 @@ install: build
 	mkdir -p ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
 	mv ${BINARY} ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
 
-testacc: 
+testacc:
 	TF_ACC=1 go test ./... -v $(TESTARGS) -timeout 120m
 
 format:
