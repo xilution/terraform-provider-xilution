@@ -18,6 +18,12 @@ func Provider() *schema.Provider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("XILUTION_CLIENT_ID", nil),
 			},
+			"client_secret": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("XILUTION_CLIENT_SECRET", nil),
+			},
 			"organization_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
