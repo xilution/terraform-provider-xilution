@@ -8,4 +8,4 @@ terraform.tfstate.backup
 coverage.out
 vendor
 crash.log
-xilution-terraform-provider
+terraform-provider-xilution

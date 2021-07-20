@@ -1,4 +1,4 @@
-module github.com/xilution/xilution-terraform-provider
+module github.com/xilution/terraform-provider-xilution
 
 go 1.16
 

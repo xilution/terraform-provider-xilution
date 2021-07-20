@@ -269,8 +269,6 @@ github.com/vmihailenco/msgpack v4.0.4+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6Ac
 github.com/vmihailenco/msgpack/v4 v4.3.12/go.mod h1:gborTTJjAo/GWTqqRjrLCn9pgNN+NXzzngzBKDPIqw4=
 github.com/vmihailenco/tagparser v0.1.1/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgqMEUPoW2WPyhdI=
 github.com/xanzy/ssh-agent v0.3.0/go.mod h1:3s9xbODqPuuhK9JV1R321M/FlMZSBvE5aY6eAcqrDh0=
-github.com/xilution/xilution-client-go v0.0.0-20210519220127-5622537a6861 h1:rrf1ysk6MOjp2/ryDgETmAl6JY9Yi2mTVgv1NpZkjqg=
-github.com/xilution/xilution-client-go v0.0.0-20210519220127-5622537a6861/go.mod h1:srKt3z1dxmWkPXKjLkpNiXr2mzp03b0/jjEOjgi3M4E=
 github.com/xilution/xilution-client-go v0.0.0-20210719140933-c37c3e4f3e72 h1:2FsoVsQexpG2MOdrLOVcpPFG+twMv9OGRMFkH6CWgrE=
 github.com/xilution/xilution-client-go v0.0.0-20210719140933-c37c3e4f3e72/go.mod h1:srKt3z1dxmWkPXKjLkpNiXr2mzp03b0/jjEOjgi3M4E=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

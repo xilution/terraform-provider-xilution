@@ -3,8 +3,7 @@ package main
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-
-	"github.com/xilution/xilution-terraform-provider/internal/provider"
+	"github.com/xilution/terraform-provider-xilution/internal/provider"
 )
 
 func main() {
