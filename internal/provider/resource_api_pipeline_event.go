@@ -97,13 +97,13 @@ func resourceApiPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 		}
 		status := pipeline.Status.ContinuousIntegrationStatus.LatestUpExecutionStatus
 		log.Println("[DEBUG] API Pipeline Status is ", status)
-		if (status == "SUCCEEDED") {
+		if status == "SUCCEEDED" {
 			done = true
 		} else {
-			if (time.Since(start).Minutes() > timeoutInMinutes) {
+			if time.Since(start).Minutes() > timeoutInMinutes {
 				return diag.FromErr(err)
 			}
-    		time.Sleep(5 * time.Second)
+			time.Sleep(5 * time.Second)
 		}
 	}
 

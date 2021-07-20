@@ -13,6 +13,21 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
+			"organization_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("XILUTION_ORGANIZATION_ID", nil),
+			},
+			"grant_type": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("XILUTION_GRANT_TYPE", "client_credentials"),
+			},
+			"scope": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("XILUTION_SCOPE", "read write"),
+			},
 			"client_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -23,11 +38,6 @@ func Provider() *schema.Provider {
 				Optional:    true,
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("XILUTION_CLIENT_SECRET", nil),
-			},
-			"organization_id": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("XILUTION_ORGANIZATION_ID", nil),
 			},
 			"username": {
 				Type:        schema.TypeString,
@@ -83,30 +93,18 @@ func Provider() *schema.Provider {
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	log.Println("[INFO] Configuring Xilution Provider")
 
-	clientId := d.Get("client_id").(string)
 	organizationId := d.Get("organization_id").(string)
+	grantType := d.Get("grant_type").(string)
+	scope := d.Get("scope").(string)
+	clientId := d.Get("client_id").(string)
+	clientSecret := d.Get("client_secret").(string)
 	username := d.Get("username").(string)
 	password := d.Get("password").(string)
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	if clientId != "" && organizationId != "" && username != "" && password != "" {
-		xc, err := xilution.NewXilutionClient(&clientId, &organizationId, &username, &password)
-		if err != nil {
-			diags = append(diags, diag.Diagnostic{
-				Severity: diag.Error,
-				Summary:  "Unable to create Xilution client",
-				Detail:   "Unable to auth user for authenticated Xilution client",
-			})
-
-			return nil, diags
-		}
-
-		return xc, diags
-	}
-
-	xc, err := xilution.NewXilutionClient(nil, nil, nil, nil)
+	xc, err := xilution.NewXilutionClient(&organizationId, &grantType, &scope, &clientId, &clientSecret, &username, &password)
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,

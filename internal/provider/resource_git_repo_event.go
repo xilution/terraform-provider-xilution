@@ -103,13 +103,13 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 		}
 		status := gitRepo.Status
 		log.Println("[DEBUG] Git Repo Status is ", status)
-		if (status == "ACTIVE") {
+		if status == "ACTIVE" {
 			done = true
 		} else {
-			if (time.Since(start).Minutes() > timeoutInMinutes) {
+			if time.Since(start).Minutes() > timeoutInMinutes {
 				return diag.FromErr(err)
 			}
-    		time.Sleep(5 * time.Second)
+			time.Sleep(5 * time.Second)
 		}
 	}
 
