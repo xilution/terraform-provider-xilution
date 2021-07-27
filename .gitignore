@@ -27,6 +27,7 @@ website/node_modules
 .env
 examples.plan
 .terraform.lock.hcl
+*.lock.info
 
 website/vendor
 
