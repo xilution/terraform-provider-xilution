@@ -91,7 +91,7 @@ func resourceWordPressPipelineEventCreate(ctx context.Context, d *schema.Resourc
 	done := false
 	start := time.Now()
 	for !done {
-		pipeline, err := c.GetWordPressPipeline(&organizationId, id)
+		pipeline, err := c.GetWordPressPipeline(&organizationId, &pipelineId)
 		if err != nil {
 			return diag.FromErr(err)
 		}

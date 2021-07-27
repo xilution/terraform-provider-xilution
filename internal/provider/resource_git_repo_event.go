@@ -89,7 +89,7 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 		return diag.FromErr(err)
 	}
 
-	id := getIdFromLocationUrl(location)
+	id := getIdFromLocationUrl(location) 
 
 	d.SetId(*id)
 
@@ -97,7 +97,8 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 	done := false
 	start := time.Now()
 	for !done {
-		gitRepo, err := c.GetGitRepo(&organizationId, id)
+		log.Println("[DEBUG] Git Repo id is ", &gitRepoId)
+		gitRepo, err := c.GetGitRepo(&organizationId, &gitRepoId)
 		if err != nil {
 			return diag.FromErr(err)
 		}

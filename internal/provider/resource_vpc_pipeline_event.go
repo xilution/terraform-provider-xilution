@@ -91,7 +91,7 @@ func resourceVpcPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 	done := false
 	start := time.Now()
 	for !done {
-		pipeline, err := c.GetVpcPipeline(&organizationId, id)
+		pipeline, err := c.GetVpcPipeline(&organizationId, &pipelineId)
 		if err != nil {
 			return diag.FromErr(err)
 		}

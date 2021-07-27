@@ -91,7 +91,7 @@ func resourceK8sPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 	done := false
 	start := time.Now()
 	for !done {
-		pipeline, err := c.GetK8sPipeline(&organizationId, id)
+		pipeline, err := c.GetK8sPipeline(&organizationId, &pipelineId)
 		if err != nil {
 			return diag.FromErr(err)
 		}
