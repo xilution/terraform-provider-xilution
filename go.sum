@@ -273,6 +273,8 @@ github.com/vmihailenco/tagparser v0.1.1/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgq
 github.com/xanzy/ssh-agent v0.3.0/go.mod h1:3s9xbODqPuuhK9JV1R321M/FlMZSBvE5aY6eAcqrDh0=
 github.com/xilution/xilution-client-go v0.0.0-20210719140933-c37c3e4f3e72 h1:2FsoVsQexpG2MOdrLOVcpPFG+twMv9OGRMFkH6CWgrE=
 github.com/xilution/xilution-client-go v0.0.0-20210719140933-c37c3e4f3e72/go.mod h1:srKt3z1dxmWkPXKjLkpNiXr2mzp03b0/jjEOjgi3M4E=
+github.com/xilution/xilution-client-go v0.0.0-20210804131615-60a40ce3e7a6 h1:g6hAAMlmTYjITBCgtxWoImAG0BX6oFFkjkNLUlYsOOg=
+github.com/xilution/xilution-client-go v0.0.0-20210804131615-60a40ce3e7a6/go.mod h1:srKt3z1dxmWkPXKjLkpNiXr2mzp03b0/jjEOjgi3M4E=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
