@@ -134,22 +134,22 @@ output "xilution_vpc_pipeline" {
   value = data.xilution_vpc_pipeline.xilution_vpc_pipeline
 }
 
-# Xilution VPC Pipeline Event
+# Xilution VPC Pipeline Provision Event
 
-resource "xilution_vpc_pipeline_event" "xilution_vpc_pipeline_event" {
+resource "xilution_vpc_pipeline_event" "xilution_vpc_pipeline_provision_event" {
   organization_id = local.organization_id
   owning_user_id  = local.user_id
   pipeline_id     = xilution_vpc_pipeline.xilution_vpc_pipeline.id
   event_type      = "PROVISION"
 }
 
-data "xilution_vpc_pipeline_event" "xilution_vpc_pipeline_event" {
-  id              = xilution_vpc_pipeline_event.xilution_vpc_pipeline_event.id
+data "xilution_vpc_pipeline_event" "xilution_vpc_pipeline_provision_event" {
+  id              = xilution_vpc_pipeline_event.xilution_vpc_pipeline_provision_event.id
   organization_id = local.organization_id
 }
 
-output "xilution_vpc_pipeline_event" {
-  value = data.xilution_vpc_pipeline_event.xilution_vpc_pipeline_event
+output "xilution_vpc_pipeline_provision_event" {
+  value = data.xilution_vpc_pipeline_event.xilution_vpc_pipeline_provision_event
 }
 
 # Xilution K8s Pipeline
