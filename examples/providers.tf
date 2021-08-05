@@ -3,7 +3,7 @@ terraform {
     xilution = {
       source = "xilution.com/xilution/xilution"
       # source  = "registry.terraform.io/xilution/xilution"
-      version = "0.1.2"
+      version = "0.1.3"
     }
   }
 }

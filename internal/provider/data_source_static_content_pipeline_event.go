@@ -2,7 +2,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -23,13 +22,9 @@ func dataSourceStaticContentPipelineEvent() *schema.Resource {
 			},
 			"pipeline_id": {
 				Type:     schema.TypeString,
-				Required: true,
-			},
-			"event_type": {
-				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"parameters": {
+			"event_type": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -75,14 +70,6 @@ func dataSourceStaticContentPipelineEventRead(ctx context.Context, d *schema.Res
 	}
 
 	if err := d.Set("event_type", pipelineEvent.EventType); err != nil {
-		return diag.FromErr(err)
-	}
-
-	jsonStr, err := json.Marshal(pipelineEvent.Parameters)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	if err := d.Set("parameters", string(jsonStr)); err != nil {
 		return diag.FromErr(err)
 	}
 

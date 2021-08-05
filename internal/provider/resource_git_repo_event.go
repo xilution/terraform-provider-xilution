@@ -88,8 +88,9 @@ func resourceGitRepoEventCreate(ctx context.Context, d *schema.ResourceData, m i
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	time.Sleep(5 * time.Second)
 
-	id := getIdFromLocationUrl(location) 
+	id := getIdFromLocationUrl(location)
 
 	d.SetId(*id)
 

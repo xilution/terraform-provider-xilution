@@ -2,8 +2,7 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
-	"log"
+	"errors"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -34,10 +33,6 @@ func resourceVpcPipelineEvent() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"parameters": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
 			"owning_user_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -62,13 +57,6 @@ func resourceVpcPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 	organizationId := d.Get("organization_id").(string)
 	pipelineId := d.Get("pipeline_id").(string)
 	owningUserId := d.Get("owning_user_id").(string)
-	parametersStr := d.Get("parameters").(string)
-	var parametersData map[string]interface{}
-	err := json.Unmarshal([]byte(parametersStr), &parametersData)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
 	eventType := d.Get("event_type").(string)
 
 	location, err := c.CreateVpcPipelineEvent(&organizationId, &xc.PipelineEvent{
@@ -76,12 +64,12 @@ func resourceVpcPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 		PipelineId:     pipelineId,
 		OrganizationId: organizationId,
 		OwningUserId:   owningUserId,
-		Parameters:     parametersData,
 		EventType:      eventType,
 	})
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	time.Sleep(5 * time.Second)
 
 	id := getIdFromLocationUrl(location)
 
@@ -95,10 +83,22 @@ func resourceVpcPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		status := pipeline.Status.ContinuousIntegrationStatus.LatestUpExecutionStatus
-		log.Println("[DEBUG] VPC Pipeline Status is ", status)
-		if status == "SUCCEEDED" {
-			done = true
+		status := pipeline.Status
+		if pipeline.Status != nil {
+			infrastructureStatus := status.InfrastructureStatus
+			if infrastructureStatus == "CREATE_COMPLETE" {
+				continuousIntegrationStatus := status.ContinuousIntegrationStatus
+				if continuousIntegrationStatus != nil {
+					latestUpExecutionStatus := continuousIntegrationStatus.LatestUpExecutionStatus
+					if latestUpExecutionStatus == "SUCCEEDED" {
+						done = true
+					} else if latestUpExecutionStatus == "FAILED" {
+						return diag.FromErr(errors.New("create pipeline event failed. pipeline up status is failed"))
+					}
+				}
+			} else if infrastructureStatus == "CREATE_FAILED" {
+				return diag.FromErr(errors.New("create pipeline event failed. pipeline infrastructure status is failed"))
+			}
 		} else {
 			if time.Since(start).Minutes() > timeoutInMinutes {
 				return diag.FromErr(err)
@@ -145,15 +145,6 @@ func resourceVpcPipelineEventRead(ctx context.Context, d *schema.ResourceData, m
 	}
 
 	if err := d.Set("organization_id", vpcPipelineEvent.OrganizationId); err != nil {
-		return diag.FromErr(err)
-	}
-
-	jsonStr, err := json.Marshal(vpcPipelineEvent.Parameters)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	log.Println("[DEBUG] jsonStr: " + string(jsonStr))
-	if err := d.Set("parameters", string(jsonStr)); err != nil {
 		return diag.FromErr(err)
 	}
 

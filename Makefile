@@ -2,7 +2,7 @@ HOSTNAME=xilution.com
 NAMESPACE=xilution
 NAME=xilution
 BINARY=terraform-provider-${NAME}
-VERSION=0.1.2
+VERSION=0.1.3
 OS_ARCH=darwin_amd64
 
 default: install
