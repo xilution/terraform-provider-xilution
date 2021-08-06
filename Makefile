@@ -2,7 +2,7 @@ HOSTNAME=xilution.com
 NAMESPACE=xilution
 NAME=xilution
 BINARY=terraform-provider-${NAME}
-VERSION=0.1.3
+VERSION=0.0.0
 OS_ARCH=darwin_amd64
 
 default: install
@@ -37,7 +37,11 @@ format:
 clean:
 	rm -rf vendor terraform.tfstate terraform.tfstate.backup .terraform.lock.hcl .terraform
 
-run_examples:
+run_example_apply:
 	terraform init ./examples/
 	terraform plan -out examples.plan ./examples
 	terraform apply -auto-approve examples.plan
+
+run_example_destroy:
+	terraform init ./examples/
+	terraform destroy -auto-approve ./examples

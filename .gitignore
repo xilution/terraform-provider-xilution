@@ -39,3 +39,4 @@ website/vendor
 *.winfile eol=crlf
 
 terraform-provider-xilution
+docs

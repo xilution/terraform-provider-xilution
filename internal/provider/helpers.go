@@ -54,6 +54,10 @@ func waitForPipelineUpToSucceeded(
 	waitIncrement time.Duration,
 	getPipelineStatusFunc func() (*xc.PipelineStatus, error),
 ) error {
+	if waitIncrement < 5*time.Second {
+		return errors.New("wait increment must be greater than 5 seconds")
+	}
+	
 	done := false
 	start := time.Now()
 	for !done {
@@ -92,6 +96,10 @@ func waitForPipelineInfrastructureUpdateComplete(
 	waitIncrement time.Duration,
 	getPipelineStatusFunc func() (*xc.PipelineStatus, error),
 ) error {
+	if waitIncrement < 5*time.Second {
+		return errors.New("wait increment must be greater than 5 seconds")
+	}
+
 	done := false
 	start := time.Now()
 	for !done {
@@ -123,8 +131,13 @@ func waitForPipelineInfrastructureNotFound(
 	waitIncrement time.Duration,
 	getPipelineStatusFunc func() (*xc.PipelineStatus, error),
 ) error {
+	if waitIncrement < 5*time.Second {
+		return errors.New("wait increment must be greater than 5 seconds")
+	}
+
 	done := false
 	start := time.Now()
+	notFoundCount := 0
 	for !done {
 		status, err := getPipelineStatusFunc()
 		if err != nil {
@@ -133,7 +146,10 @@ func waitForPipelineInfrastructureNotFound(
 		if status != nil {
 			infrastructureStatus := status.InfrastructureStatus
 			if infrastructureStatus == NOT_FOUND {
-				done = true
+				if notFoundCount == 3 {
+					done = true
+				}
+				notFoundCount = notFoundCount + 1
 			} else if strings.HasSuffix(infrastructureStatus, FAILED) {
 				return fmt.Errorf("pipeline infrastructure status is %s", infrastructureStatus)
 			}
