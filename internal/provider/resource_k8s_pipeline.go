@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -176,9 +177,42 @@ func resourceK8sPipelineDelete(ctx context.Context, d *schema.ResourceData, m in
 	var diags diag.Diagnostics
 
 	organizationId := d.Get("organization_id").(string)
+	owningUserId := d.Get("owning_user_id").(string)
 	id := d.Id()
 
-	err := c.DeleteK8sPipeline(&organizationId, &id)
+	getPipelineStatusFunc := func() (*xc.PipelineStatus, error) {
+		pipeline, err := c.GetVpcPipeline(&organizationId, &id)
+		if err != nil {
+			return nil, err
+		}
+		return pipeline.Status, nil
+	}
+
+	status, err := getPipelineStatusFunc()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if status.InfrastructureStatus != NOT_FOUND {
+		_, err = c.CreateVpcPipelineEvent(&organizationId, &xc.PipelineEvent{
+			Type:           "pipeline-event",
+			PipelineId:     id,
+			OrganizationId: organizationId,
+			OwningUserId:   owningUserId,
+			EventType:      "DEPROVISION",
+		})
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		time.Sleep(5 * time.Second)
+
+		err = waitForPipelineInfrastructureNotFound(15*time.Minute, 5*time.Second, getPipelineStatusFunc)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	err = c.DeleteK8sPipeline(&organizationId, &id)
 	if err != nil {
 		return diag.FromErr(err)
 	}
