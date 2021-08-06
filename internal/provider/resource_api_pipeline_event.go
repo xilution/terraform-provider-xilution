@@ -2,7 +2,6 @@ package provider
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -57,7 +56,6 @@ func resourceApiPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 	organizationId := d.Get("organization_id").(string)
 	pipelineId := d.Get("pipeline_id").(string)
 	owningUserId := d.Get("owning_user_id").(string)
-
 	eventType := d.Get("event_type").(string)
 
 	location, err := c.CreateApiPipelineEvent(&organizationId, &xc.PipelineEvent{
@@ -76,36 +74,17 @@ func resourceApiPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 
 	d.SetId(*id)
 
-	timeoutInMinutes := 10.0
-	done := false
-	start := time.Now()
-	for !done {
+	getPipelineStatusFunc := func() (*xc.PipelineStatus, error) {
 		pipeline, err := c.GetApiPipeline(&organizationId, &pipelineId)
 		if err != nil {
-			return diag.FromErr(err)
+			return nil, err
 		}
-		status := pipeline.Status
-		if pipeline.Status != nil {
-			infrastructureStatus := status.InfrastructureStatus
-			if infrastructureStatus == "CREATE_COMPLETE" {
-				continuousIntegrationStatus := status.ContinuousIntegrationStatus
-				if continuousIntegrationStatus != nil {
-					latestUpExecutionStatus := continuousIntegrationStatus.LatestUpExecutionStatus
-					if latestUpExecutionStatus == "SUCCEEDED" {
-						done = true
-					} else if latestUpExecutionStatus == "FAILED" {
-						return diag.FromErr(errors.New("create pipeline event failed. pipeline up status is failed"))
-					}
-				}
-			} else if infrastructureStatus == "CREATE_FAILED" {
-				return diag.FromErr(errors.New("create pipeline event failed. pipeline infrastructure status is failed"))
-			}
-		} else {
-			if time.Since(start).Minutes() > timeoutInMinutes {
-				return diag.FromErr(err)
-			}
-			time.Sleep(5 * time.Second)
-		}
+		return pipeline.Status, nil
+	}
+
+	err = waitForPipelineEventToComplete(eventType, 10*time.Minute, 5*time.Second, getPipelineStatusFunc)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 
 	apiPipelineEvent, err := c.GetApiPipelineEvent(&organizationId, id)

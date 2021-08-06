@@ -2,7 +2,6 @@ package provider
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -76,36 +75,17 @@ func resourceK8sPipelineEventCreate(ctx context.Context, d *schema.ResourceData,
 
 	d.SetId(*id)
 
-	timeoutInMinutes := 45.0
-	done := false
-	start := time.Now()
-	for !done {
+	getPipelineStatusFunc := func() (*xc.PipelineStatus, error) {
 		pipeline, err := c.GetK8sPipeline(&organizationId, &pipelineId)
 		if err != nil {
-			return diag.FromErr(err)
+			return nil, err
 		}
-		status := pipeline.Status
-		if pipeline.Status != nil {
-			infrastructureStatus := status.InfrastructureStatus
-			if infrastructureStatus == "CREATE_COMPLETE" {
-				continuousIntegrationStatus := status.ContinuousIntegrationStatus
-				if continuousIntegrationStatus != nil {
-					latestUpExecutionStatus := continuousIntegrationStatus.LatestUpExecutionStatus
-					if latestUpExecutionStatus == "SUCCEEDED" {
-						done = true
-					} else if latestUpExecutionStatus == "FAILED" {
-						return diag.FromErr(errors.New("create pipeline event failed. pipeline up status is failed"))
-					}
-				}
-			} else if infrastructureStatus == "CREATE_FAILED" {
-				return diag.FromErr(errors.New("create pipeline event failed. pipeline infrastructure status is failed"))
-			}
-		} else {
-			if time.Since(start).Minutes() > timeoutInMinutes {
-				return diag.FromErr(err)
-			}
-			time.Sleep(5 * time.Second)
-		}
+		return pipeline.Status, nil
+	}
+
+	err = waitForPipelineEventToComplete(eventType, 45*time.Minute, 5*time.Second, getPipelineStatusFunc)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 
 	k8sPipelineEvent, err := c.GetK8sPipelineEvent(&organizationId, id)
