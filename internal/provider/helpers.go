@@ -57,7 +57,7 @@ func waitForPipelineUpToSucceeded(
 	if waitIncrement < 5*time.Second {
 		return errors.New("wait increment must be greater than 5 seconds")
 	}
-	
+
 	done := false
 	start := time.Now()
 	for !done {
@@ -146,7 +146,7 @@ func waitForPipelineInfrastructureNotFound(
 		if status != nil {
 			infrastructureStatus := status.InfrastructureStatus
 			if infrastructureStatus == NOT_FOUND {
-				if notFoundCount == 3 {
+				if notFoundCount == 5 {
 					done = true
 				}
 				notFoundCount = notFoundCount + 1
