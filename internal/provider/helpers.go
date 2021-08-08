@@ -73,6 +73,7 @@ func waitForPipelineUpToSucceeded(
 					latestUpExecutionStatus := continuousIntegrationStatus.LatestUpExecutionStatus
 					if latestUpExecutionStatus == SUCCEEDED {
 						done = true
+						continue;
 					} else if strings.HasSuffix(latestUpExecutionStatus, FAILED) {
 						return fmt.Errorf("pipeline up status is %s", latestUpExecutionStatus)
 					}
@@ -80,12 +81,12 @@ func waitForPipelineUpToSucceeded(
 			} else if strings.HasSuffix(infrastructureStatus, FAILED) {
 				return fmt.Errorf("pipeline infrastructure status is %s", infrastructureStatus)
 			}
-		} else {
-			if time.Since(start) > timeout {
-				return errors.New("timeout waiting for pipeline to succeed")
-			}
-			time.Sleep(waitIncrement)
 		}
+
+		if time.Since(start) > timeout {
+			return errors.New("timeout waiting for pipeline up to succeed")
+		}
+		time.Sleep(waitIncrement)
 	}
 
 	return nil
@@ -111,16 +112,17 @@ func waitForPipelineInfrastructureUpdateComplete(
 			infrastructureStatus := status.InfrastructureStatus
 			if infrastructureStatus == UPDATE_COMPLETE {
 				done = true
+				continue;
 			} else if infrastructureStatus == UPDATE_ROLLBACK_COMPLETE ||
 				strings.HasSuffix(infrastructureStatus, FAILED) {
 				return fmt.Errorf("pipeline infrastructure status is %s", infrastructureStatus)
 			}
-		} else {
-			if time.Since(start) > timeout {
-				return errors.New("timeout waiting for pipeline to succeed")
-			}
-			time.Sleep(waitIncrement)
 		}
+	
+		if time.Since(start) > timeout {
+			return errors.New("timeout waiting for pipeline infrastructure update to complete")
+		}
+		time.Sleep(waitIncrement)
 	}
 
 	return nil
@@ -146,19 +148,21 @@ func waitForPipelineInfrastructureNotFound(
 		if status != nil {
 			infrastructureStatus := status.InfrastructureStatus
 			if infrastructureStatus == NOT_FOUND {
-				if notFoundCount == 5 {
+				if notFoundCount > 5 {
 					done = true
+					continue;
 				}
+
 				notFoundCount = notFoundCount + 1
 			} else if strings.HasSuffix(infrastructureStatus, FAILED) {
 				return fmt.Errorf("pipeline infrastructure status is %s", infrastructureStatus)
 			}
-		} else {
-			if time.Since(start) > timeout {
-				return errors.New("timeout waiting for pipeline to succeed")
-			}
-			time.Sleep(waitIncrement)
 		}
+
+		if time.Since(start) > timeout {
+			return errors.New("timeout waiting for pipeline infrastructure to be not found")
+		}
+		time.Sleep(waitIncrement)
 	}
 
 	return nil
