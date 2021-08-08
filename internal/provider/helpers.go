@@ -73,7 +73,7 @@ func waitForPipelineUpToSucceeded(
 					latestUpExecutionStatus := continuousIntegrationStatus.LatestUpExecutionStatus
 					if latestUpExecutionStatus == SUCCEEDED {
 						done = true
-						continue;
+						continue
 					} else if strings.HasSuffix(latestUpExecutionStatus, FAILED) {
 						return fmt.Errorf("pipeline up status is %s", latestUpExecutionStatus)
 					}
@@ -112,13 +112,13 @@ func waitForPipelineInfrastructureUpdateComplete(
 			infrastructureStatus := status.InfrastructureStatus
 			if infrastructureStatus == UPDATE_COMPLETE {
 				done = true
-				continue;
+				continue
 			} else if infrastructureStatus == UPDATE_ROLLBACK_COMPLETE ||
 				strings.HasSuffix(infrastructureStatus, FAILED) {
 				return fmt.Errorf("pipeline infrastructure status is %s", infrastructureStatus)
 			}
 		}
-	
+
 		if time.Since(start) > timeout {
 			return errors.New("timeout waiting for pipeline infrastructure update to complete")
 		}
@@ -150,7 +150,7 @@ func waitForPipelineInfrastructureNotFound(
 			if infrastructureStatus == NOT_FOUND {
 				if notFoundCount > 5 {
 					done = true
-					continue;
+					continue
 				}
 
 				notFoundCount = notFoundCount + 1
