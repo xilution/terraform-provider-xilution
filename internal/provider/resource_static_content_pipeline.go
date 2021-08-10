@@ -271,7 +271,7 @@ func resourceStaticContentPipelineDelete(ctx context.Context, d *schema.Resource
 		}
 		time.Sleep(5 * time.Second)
 
-		err = waitForPipelineInfrastructureNotFound(15*time.Minute, 5*time.Second, getPipelineStatusFunc)
+		err = waitForPipelineInfrastructureNotFound(30*time.Minute, 5*time.Second, getPipelineStatusFunc)
 		if err != nil {
 			return diag.FromErr(err)
 		}

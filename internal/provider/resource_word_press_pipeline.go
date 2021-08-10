@@ -271,7 +271,7 @@ func resourceWordPressPipelineDelete(ctx context.Context, d *schema.ResourceData
 		}
 		time.Sleep(5 * time.Second)
 
-		err = waitForPipelineInfrastructureNotFound(15*time.Minute, 5*time.Second, getPipelineStatusFunc)
+		err = waitForPipelineInfrastructureNotFound(30*time.Minute, 5*time.Second, getPipelineStatusFunc)
 		if err != nil {
 			return diag.FromErr(err)
 		}

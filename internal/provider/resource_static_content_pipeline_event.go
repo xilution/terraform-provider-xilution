@@ -83,7 +83,7 @@ func resourceStaticContentPipelineEventCreate(ctx context.Context, d *schema.Res
 		return pipeline.Status, nil
 	}
 
-	err = waitForPipelineEventToComplete(eventType, 15*time.Minute, 5*time.Second, getPipelineStatusFunc)
+	err = waitForPipelineEventToComplete(eventType, 30*time.Minute, 5*time.Second, getPipelineStatusFunc)
 	if err != nil {
 		return diag.FromErr(err)
 	}

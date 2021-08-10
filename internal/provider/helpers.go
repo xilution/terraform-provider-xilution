@@ -30,17 +30,17 @@ func waitForPipelineEventToComplete(
 	getPipelineStatusFunc func() (*xc.PipelineStatus, error),
 ) error {
 	if eventType == "PROVISION" || eventType == "RUN_NOW" {
-		err := waitForPipelineUpToSucceeded(10*time.Minute, 5*time.Second, getPipelineStatusFunc)
+		err := waitForPipelineUpToSucceeded(timeout, waitIncrement, getPipelineStatusFunc)
 		if err != nil {
 			return err
 		}
 	} else if eventType == "REPROVISION" {
-		err := waitForPipelineInfrastructureUpdateComplete(10*time.Minute, 5*time.Second, getPipelineStatusFunc)
+		err := waitForPipelineInfrastructureUpdateComplete(timeout, waitIncrement, getPipelineStatusFunc)
 		if err != nil {
 			return err
 		}
 	} else if eventType == "DEPROVISION" {
-		err := waitForPipelineInfrastructureNotFound(10*time.Minute, 5*time.Second, getPipelineStatusFunc)
+		err := waitForPipelineInfrastructureNotFound(timeout, waitIncrement, getPipelineStatusFunc)
 		if err != nil {
 			return err
 		}
