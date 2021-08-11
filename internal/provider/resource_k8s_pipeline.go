@@ -181,7 +181,7 @@ func resourceK8sPipelineDelete(ctx context.Context, d *schema.ResourceData, m in
 	id := d.Id()
 
 	getPipelineStatusFunc := func() (*xc.PipelineStatus, error) {
-		pipeline, err := c.GetVpcPipeline(&organizationId, &id)
+		pipeline, err := GetK8sPipeline(&organizationId, &id)
 		if err != nil {
 			return nil, err
 		}
@@ -194,7 +194,7 @@ func resourceK8sPipelineDelete(ctx context.Context, d *schema.ResourceData, m in
 	}
 
 	if status.InfrastructureStatus != NOT_FOUND {
-		_, err = c.CreateVpcPipelineEvent(&organizationId, &xc.PipelineEvent{
+		_, err = c.CreateK8sPipelineEvent(&organizationId, &xc.PipelineEvent{
 			Type:           "pipeline-event",
 			PipelineId:     id,
 			OrganizationId: organizationId,

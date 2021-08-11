@@ -246,7 +246,7 @@ func resourceStaticContentPipelineDelete(ctx context.Context, d *schema.Resource
 	id := d.Id()
 
 	getPipelineStatusFunc := func() (*xc.PipelineStatus, error) {
-		pipeline, err := c.GetVpcPipeline(&organizationId, &id)
+		pipeline, err := c.GetStaticContentPipeline(&organizationId, &id)
 		if err != nil {
 			return nil, err
 		}
@@ -259,7 +259,7 @@ func resourceStaticContentPipelineDelete(ctx context.Context, d *schema.Resource
 	}
 
 	if status.InfrastructureStatus != NOT_FOUND {
-		_, err = c.CreateVpcPipelineEvent(&organizationId, &xc.PipelineEvent{
+		_, err = c.CreateStaticContentPipelineEvent(&organizationId, &xc.PipelineEvent{
 			Type:           "pipeline-event",
 			PipelineId:     id,
 			OrganizationId: organizationId,
