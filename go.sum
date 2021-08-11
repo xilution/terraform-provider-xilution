@@ -276,8 +276,14 @@ github.com/vmihailenco/msgpack v4.0.4+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6Ac
 github.com/vmihailenco/msgpack/v4 v4.3.12/go.mod h1:gborTTJjAo/GWTqqRjrLCn9pgNN+NXzzngzBKDPIqw4=
 github.com/vmihailenco/tagparser v0.1.1/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgqMEUPoW2WPyhdI=
 github.com/xanzy/ssh-agent v0.3.0/go.mod h1:3s9xbODqPuuhK9JV1R321M/FlMZSBvE5aY6eAcqrDh0=
-github.com/xilution/xilution-client-go v0.0.0-20210809003928-ab93e04c0604 h1:2b9pHx0GqrxQY7CWfqWB9GO4kEG1W+F6I0PLqfuU2l0=
-github.com/xilution/xilution-client-go v0.0.0-20210809003928-ab93e04c0604/go.mod h1:IDjqqH0/KWrJyPjqEz+0Pcm9vrNBshFRHg4vG4BfLRQ=
+github.com/xilution/xilution-client-go v0.0.0-20210811034214-6fada8fb915f h1:sl4PIqn66ImyNp8OBvQbnjBkvcLs8VeoLMyK9Fzvxtc=
+github.com/xilution/xilution-client-go v0.0.0-20210811034214-6fada8fb915f/go.mod h1:IDjqqH0/KWrJyPjqEz+0Pcm9vrNBshFRHg4vG4BfLRQ=
+github.com/xilution/xilution-client-go v0.0.0-20210811034628-45eeed8cab7b h1:5c7/LHtuSToMrV87W8ilecdTg9+Qxa31vrl4QYtBPjo=
+github.com/xilution/xilution-client-go v0.0.0-20210811034628-45eeed8cab7b/go.mod h1:IDjqqH0/KWrJyPjqEz+0Pcm9vrNBshFRHg4vG4BfLRQ=
+github.com/xilution/xilution-client-go v0.0.0-20210811034840-351401c814a2 h1:XxhErQgWfRwQKqOPLa4h9emrCS2RSVlx/Zxqec+7yy0=
+github.com/xilution/xilution-client-go v0.0.0-20210811034840-351401c814a2/go.mod h1:IDjqqH0/KWrJyPjqEz+0Pcm9vrNBshFRHg4vG4BfLRQ=
+github.com/xilution/xilution-client-go v0.0.0-20210811042517-5657802f0df4 h1:lzTGxMHubyMA2SxS3zIHgPLzxlwyOyBoSFQ7yabraDI=
+github.com/xilution/xilution-client-go v0.0.0-20210811042517-5657802f0df4/go.mod h1:IDjqqH0/KWrJyPjqEz+0Pcm9vrNBshFRHg4vG4BfLRQ=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

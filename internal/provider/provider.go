@@ -69,6 +69,7 @@ func Provider() *schema.Provider {
 			"xilution_static_content_pipeline_event": dataSourceStaticContentPipelineEvent(),
 			"xilution_api_pipeline":                  dataSourceApiPipeline(),
 			"xilution_api_pipeline_event":            dataSourceApiPipelineEvent(),
+			"xilution_pipeline_prototype":            dataSourcePipelinePrototype(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"xilution_git_account":                   resourceGitAccount(),
@@ -85,6 +86,7 @@ func Provider() *schema.Provider {
 			"xilution_static_content_pipeline_event": resourceStaticContentPipelineEvent(),
 			"xilution_api_pipeline":                  resourceApiPipeline(),
 			"xilution_api_pipeline_event":            resourceApiPipelineEvent(),
+			"xilution_pipeline_prototype":            resourcePipelinePrototype(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
