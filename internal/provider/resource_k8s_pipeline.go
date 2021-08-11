@@ -181,7 +181,7 @@ func resourceK8sPipelineDelete(ctx context.Context, d *schema.ResourceData, m in
 	id := d.Id()
 
 	getPipelineStatusFunc := func() (*xc.PipelineStatus, error) {
-		pipeline, err := GetK8sPipeline(&organizationId, &id)
+		pipeline, err := c.GetK8sPipeline(&organizationId, &id)
 		if err != nil {
 			return nil, err
 		}
